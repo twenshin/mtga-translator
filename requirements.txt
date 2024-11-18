@@ -1,0 +1,6 @@
+orjson
+requests
+pydantic
+questionary
+sqlalchemy[asyncio]
+aiosqlite

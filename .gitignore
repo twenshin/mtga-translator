@@ -1,0 +1,5 @@
+/.vscode
+/venv
+/in
+/backups
+**/__pycache__
