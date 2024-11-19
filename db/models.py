@@ -6,7 +6,7 @@ class Base(AsyncAttrs, DeclarativeBase):
     """Базовая модель"""
 
 
-class LocalizationModel(Base):
+class ClientLocalizationModel(Base):
     __tablename__ = "Loc"
 
     Key: Mapped[str] = mapped_column(primary_key=True)
@@ -19,3 +19,20 @@ class LocalizationModel(Base):
     esES: Mapped[str]
     jaJP: Mapped[str]
     koKR: Mapped[str]
+
+
+class CardLocalizationModel(Base):
+    __tablename__ = "Localizations"
+
+    LocId: Mapped[int] = mapped_column(primary_key=True)
+    Formatted: Mapped[int] = mapped_column(primary_key=True)
+    KnownTitleId: Mapped[int]
+    enUS: Mapped[str]
+    ptBR: Mapped[str]
+    frFR: Mapped[str]
+    itIT: Mapped[str]
+    deDe: Mapped[str]
+    esES: Mapped[str]
+    jaJP: Mapped[str]
+    koKR: Mapped[str]
+    phyrexian: Mapped[str]
