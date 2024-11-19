@@ -2,7 +2,6 @@ import asyncio
 import logging
 import sys
 
-from translator.translator import Translator
 from translator.client_localization_translator import ClientLocalizationTranslator
 from translator.card_database_translator import CardDatabaseTranslator
 from ui.form import Form
@@ -19,7 +18,7 @@ async def run():
         "custom_path": form.custom_path,
     }
     client_localization_translator = ClientLocalizationTranslator(**kwargs)
-    # await client_localization_translator.translate()
+    await client_localization_translator.translate()
     logging.info(
         f"Локализация клиента готова! Обработано {client_localization_translator.processed_count} строк из {client_localization_translator.total_count}"
     )
