@@ -47,13 +47,13 @@ def prepare_localization(localization: List[dict], locale: str) -> dict:
 
     return result
 
+
 def prepare_data(localization: List[dict], source_locale: str) -> dict:
     needed_loc = next(x["keys"] for x in localization if x["isoCode"] == source_locale)
     if not needed_loc:
         raise ValueError()
 
     return {x["id"]: x["text"] for x in needed_loc}
-
 
 
 def open_custom_localization_file(bundle_path: os.PathLike, bundle: str) -> dict:

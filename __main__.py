@@ -2,8 +2,8 @@ import asyncio
 import logging
 import sys
 
-from translator.client_localization_translator import ClientLocalizationTranslator
 from translator.card_database_translator import CardDatabaseTranslator
+from translator.client_localization_translator import ClientLocalizationTranslator
 from ui.form import Form
 
 

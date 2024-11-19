@@ -5,15 +5,16 @@ from sqlalchemy import func, select, update
 from sqlalchemy.engine import ChunkedIteratorResult
 from sqlalchemy.exc import NoResultFound
 
-from translator.translator import Translator
 from db.models import CardLocalizationModel
 from db.utils import session_factory
+from translator.translator import Translator
 from utils import (
     find_localization_file,
     open_custom_localization_file,
     open_localization_file,
     prepare_data,
 )
+
 
 class CardDatabaseTranslator(Translator):
     def __init__(
@@ -31,18 +32,19 @@ class CardDatabaseTranslator(Translator):
         :param locale_to_replace: Заменяемая локаль
         :param locale_source: Какой локалью необходимо заменить
         """
-        loc_path = os.path.join(loc_path, 'data')
+        loc_path = os.path.join(loc_path, "data")
         if custom_path:
-            custom_path = os.path.join(custom_path, 'data')
+            custom_path = os.path.join(custom_path, "data")
 
-        super().__init__(loc_path, target_path, custom_path, locale_to_replace, locale_source)
+        super().__init__(
+            loc_path, target_path, custom_path, locale_to_replace, locale_source
+        )
 
         self.target_db_filename = find_localization_file(
             self.target_path,
             "Raw_CardDatabase_",
         )
         self.session_factory = session_factory(self.target_db_filename)
-
 
     async def translate(self) -> None:
         self.backup(self.target_db_filename)
@@ -61,9 +63,13 @@ class CardDatabaseTranslator(Translator):
         for table in tables:
             await self._translate_table(*table)
 
-    async def _translate_table(self, _, old_style_file):  # FIXME: Может, убрать названия таблиц нового клиента?
+    async def _translate_table(
+        self, _, old_style_file
+    ):  # FIXME: Может, убрать названия таблиц нового клиента?
         query_batch = []
-        raw_localization = open_localization_file(self.loc_path, f"data_{old_style_file}")
+        raw_localization = open_localization_file(
+            self.loc_path, f"data_{old_style_file}"
+        )
         localization = prepare_data(raw_localization, self.locale_source)
         if self.custom_path:
             custom_localization = open_custom_localization_file(
@@ -101,12 +107,20 @@ class CardDatabaseTranslator(Translator):
             if translation == "#NoTranslationNeeded":
                 continue
 
-            to_update_cur: ChunkedIteratorResult  = await session.execute(
-                select(CardLocalizationModel).where(CardLocalizationModel.LocId == loc_id)
+            to_update_cur: ChunkedIteratorResult = await session.execute(
+                select(CardLocalizationModel).where(
+                    CardLocalizationModel.LocId == loc_id
+                )
             )
             for loc in to_update_cur.scalars():
-                logging.debug(f'{getattr(loc, new_style_locale)} -> {translation}')
-                query_batch.append({"LocId": loc.LocId, "Formatted": loc.Formatted, new_style_locale: translation})
+                logging.debug(f"{getattr(loc, new_style_locale)} -> {translation}")
+                query_batch.append(
+                    {
+                        "LocId": loc.LocId,
+                        "Formatted": loc.Formatted,
+                        new_style_locale: translation,
+                    }
+                )
 
             self.processed_count += 1
 

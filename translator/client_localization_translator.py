@@ -3,15 +3,16 @@ import os
 from sqlalchemy import func, select, update
 from sqlalchemy.exc import NoResultFound
 
-from translator.translator import Translator
 from db.models import ClientLocalizationModel as LocalizationModel
 from db.utils import session_factory
+from translator.translator import Translator
 from utils import (
     find_localization_file,
     open_custom_localization_file,
     open_localization_file,
     prepare_localization,
 )
+
 
 class ClientLocalizationTranslator(Translator):
     def __init__(
@@ -29,11 +30,13 @@ class ClientLocalizationTranslator(Translator):
         :param locale_to_replace: Заменяемая локаль
         :param locale_source: Какой локалью необходимо заменить
         """
-        loc_path = os.path.join(loc_path, 'loc')
+        loc_path = os.path.join(loc_path, "loc")
         if custom_path:
-            custom_path = os.path.join(custom_path, 'loc')
+            custom_path = os.path.join(custom_path, "loc")
 
-        super().__init__(loc_path, target_path, custom_path, locale_to_replace, locale_source)
+        super().__init__(
+            loc_path, target_path, custom_path, locale_to_replace, locale_source
+        )
 
         self.target_db_filename = find_localization_file(
             self.target_path,
