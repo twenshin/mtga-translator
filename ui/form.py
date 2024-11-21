@@ -12,6 +12,7 @@ instruction = """
 чтобы проверить доступность локали.
                 """
 
+
 class Form:
     """Форма ввода данных"""
 
@@ -31,7 +32,7 @@ class Form:
             ),
             latest_path=questionary.path(
                 "Укажите папку с последней версией клиента",
-                default="C:\\Program Files\\Wizards of the Coast\\MTGA\\MTGA_Data\\Downloads\\Raw"
+                default="C:\\Program Files\\Wizards of the Coast\\MTGA\\MTGA_Data\\Downloads\\Raw",
                 only_directories=True,
             ),
             custom_path=questionary.path(
