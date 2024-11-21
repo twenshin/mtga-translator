@@ -6,24 +6,35 @@
 **PR приветствуются.**
 ## Использование
 В теории, скрипт работает на любой платформе, где работает интерпретатор CPython.
-Проверено на Ubuntu 24.10 и Python 3.12
+Проверено на Ubuntu 24.10, Windows 11 Home (23H2) на версии интерпретатора Python 3.12
 ### Требуемое для запуска ПО
 * Python (3.8+)
 * Git (опционально)
-### Запуск
+### Запуск (bash)
 ```bash
-git clone https://github.com/twenshin/mtga-translator.git
+git clone https://github.com/twenshin/mtga-translator.git  # Или скачать архив
 cd mtga-translator
 python3 -m venv ./venv
 source ./venv/bin/activate
 pip install -r requirements.txt
 python ./__main__.py
 ```
+### Запуск (Windows, Powershell) (нужны права администратора)
+```powershell
+winget install --id Python.Python.3.12  # Или скачайте с python.org
+
+git clone https://github.com/twenshin/mtga-translator.git  # Или скачать архив
+cd .\mtga-translator\
+& $Env:USERPROFILE\AppData\Local\Programs\Python\Python312\python.exe -m venv .\venv
+.\venv\Scripts\Activate.ps1  # Слева от пути в промпте терминала появится (venv)
+pip install -r .\requirements.txt
+python .\__main__.py
+```
 
 ## Известные баги
-- (bash/zsh) Не резолвятся пути вида `~/dir/dir/dir`.
-Временное решение - писать пути полностью.
-- Если создать пустой JSON-файл локализации и запустить скрипт, вылетит ошибка парсинга JSON.
+- ~~(bash/zsh) Не резолвятся пути вида `~/dir/dir/dir`.
+Временное решение - писать пути полностью.~~ Исправлено
+- ~~Если создать пустой JSON-файл локализации и запустить скрипт, вылетит ошибка парсинга JSON.~~ Исправлено
 
 ## ToDo
 - [x] Поддержка любых локалей (не только русской) в качестве источника

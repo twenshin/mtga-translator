@@ -74,3 +74,6 @@ def open_custom_localization_file(bundle_path: os.PathLike, bundle: str) -> dict
             f"Файл с бандлом {bundle} не был найден по адресу {bundle_file_path}. Он будет пропущен."
         )
         return {}
+
+    except json.JSONDecodeError:
+        logging.exception(f"Файл {bundle_file_path} имеет некорректный формат")

@@ -1,7 +1,16 @@
+import os
+
 import questionary
 
 from ui.locales import locales
 
+instruction = """
+Примеры:
+    ru-RU (русский)
+    zh-CN (chinese)
+Проверьте файлы локализации (откройте текстовым редактором),
+чтобы проверить доступность локали.
+                """
 
 class Form:
     """Форма ввода данных"""
@@ -22,6 +31,7 @@ class Form:
             ),
             latest_path=questionary.path(
                 "Укажите папку с последней версией клиента",
+                default="C:\\Program Files\\Wizards of the Coast\\MTGA\\MTGA_Data\\Downloads\\Raw"
                 only_directories=True,
             ),
             custom_path=questionary.path(
@@ -34,20 +44,14 @@ class Form:
             ),
             locale_source=questionary.text(
                 "На какую локаль заменить?",
-                instruction="""
-                    Примеры:
-                        ru-RU (русский)
-                        zh-CN (chinese)
-                    Проверьте файлы локализации (откройте текстовым редактором), 
-                    чтобы проверить доступность локали.
-                """,
+                instruction=instruction,
                 default="ru-RU",
             ),
         ).ask_async()
 
-        cls.rus_path = answers["rus_path"]
-        cls.latest_path = answers["latest_path"]
-        cls.locale_to_replace = answers["locale_to_replace"]
-        cls.locale_source = answers["locale_source"]
-        cls.custom_path = answers["custom_path"]
+        cls.rus_path = os.path.expanduser(answers["rus_path"])
+        cls.latest_path = os.path.expanduser(answers["latest_path"])
+        cls.locale_to_replace = os.path.expanduser(answers["locale_to_replace"])
+        cls.locale_source = os.path.expanduser(answers["locale_source"])
+        cls.custom_path = os.path.expanduser(answers["custom_path"])
         return cls

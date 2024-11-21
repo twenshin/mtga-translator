@@ -47,7 +47,6 @@ class CardDatabaseTranslator(Translator):
         self.session_factory = session_factory(self.target_db_filename)
 
     async def translate(self) -> None:
-        self.backup(self.target_db_filename)
         tables = [
             # Некоторые не нужно переводить (Cards, Versions, Enums)
             # Некоторые - неизвестно, стоит ли (SearchLocalizations)
@@ -121,8 +120,7 @@ class CardDatabaseTranslator(Translator):
                         new_style_locale: translation,
                     }
                 )
-
-            self.processed_count += 1
+                self.processed_count += 1
 
         await session.execute(
             update(CardLocalizationModel),

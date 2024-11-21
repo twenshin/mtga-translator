@@ -1,5 +1,7 @@
+import logging
 import os
 import shutil
+from time import time
 
 
 class TranslateResult:
@@ -50,8 +52,11 @@ class Translator:
         """
         target_path = os.path.join(os.getcwd(), "backups")
         os.makedirs(target_path, exist_ok=True)
-        target_filename = os.path.basename(source_path)
+        now = int(time())
+        target_filename = os.path.basename(source_path) + f"_{now}"
+        target_full_path = os.path.join(target_path, target_filename)
         shutil.copy(
             source_path,
-            os.path.join(target_path, target_filename),
+            target_full_path,
         )
+        logging.info(f"Сделана резервная копия в {target_full_path}")
