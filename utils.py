@@ -22,8 +22,8 @@ def open_localization_file(directory: os.PathLike, prefix: str) -> List[dict]:
     :returns: Содержимое файла локализации
     """
     target = find_localization_file(directory, prefix)
-    with open(os.path.join(directory, target), "r") as fp:
-        return json.loads(fp.read())
+    with open(os.path.join(directory, target), "rb") as fp:
+        return json.loads(fp.read().decode("utf-8"))
 
 
 def prepare_localization(localization: List[dict], locale: str) -> dict:
@@ -41,11 +41,19 @@ def prepare_localization(localization: List[dict], locale: str) -> dict:
     for entity in localization:
         key = entity["key"]
         translated_string = next(
-            x["translation"] for x in entity["translations"] if x["locale"] == "ru-RU"
+            x["translation"] for x in entity["translations"] if x["locale"] == locale
         )
         result[key] = translated_string
 
     return result
+
+
+def prepare_data(localization: List[dict], source_locale: str) -> dict:
+    needed_loc = next(x["keys"] for x in localization if x["isoCode"] == source_locale)
+    if not needed_loc:
+        raise ValueError()
+
+    return {x["id"]: x["text"] for x in needed_loc}
 
 
 def open_custom_localization_file(bundle_path: os.PathLike, bundle: str) -> dict:
@@ -66,3 +74,6 @@ def open_custom_localization_file(bundle_path: os.PathLike, bundle: str) -> dict
             f"Файл с бандлом {bundle} не был найден по адресу {bundle_file_path}. Он будет пропущен."
         )
         return {}
+
+    except json.JSONDecodeError:
+        logging.exception(f"Файл {bundle_file_path} имеет некорректный формат")
